@@ -1,0 +1,24 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=148
+
+This plugin uses 'Tie::Handle' mechanism to create two output handles: VIMOUT and VIMERR. Then standard output is
+associated with VIMOUT. This allows normal use of 'print' and 'printf' operators:
+
+	:perl << EOP
+		print 'Line:', $curwin->(Cursor())[0];
+		printf '%d:%d", $curwin->Cursor();
+		print VIMERR "Error: $!";
+	EOP
+
+Value in $, is handled correctly:
+	
+	:perl $, = '; ';
+	:perl print 'a' .. 'e'; # prints 'a; b; c; d; e'
+
+Value in $\ is ignored and  there is no buffering, so it works as if $\ was set to "\n":
+
+	:perl print 'one'; print 'two' 
+	
+prints same as 
+	
+	:perl print "one\ntwo"
+
